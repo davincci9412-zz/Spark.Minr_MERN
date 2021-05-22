@@ -1,0 +1,95 @@
+.exchange .btn-success.add{
+	min-width:100px;
+}
+.exchange .form-input{
+    border: 1px solid #ced4da;
+    margin: 0 1em 0 0.25em;
+    border-radius: 0.25rem;
+    width: 50px;
+}
+.exchange .btn{
+	cursor:pointer;
+}
+.exchange .input-group .form-control{
+	padding: 0.375rem 0.25rem;
+	
+}
+.exchange .form-control{
+	box-shadow:none;
+}
+.input-group-postpend{
+	margin-left: -1px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.input-group-text{
+	display: flex;
+    align-items: center;
+    padding: 0.375rem 0.375rem;
+    margin-bottom: 0;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    text-align: center;
+    white-space: nowrap;
+    background-color: #e9ecef;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+	border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.exchange .calculation{
+	display:flex;
+    justify-content: center;
+}
+.exchange .navbar-nav{
+	flex-flow: row nowrap;
+    justify-content: flex-end;
+}
+.out-link{
+	color: black;
+    text-decoration: underline;
+    margin: 0.25em 1em 0;
+    display: block;
+}
+.exchange .table th{
+	background-color: #f9fcff;
+}
+.exchange .table-header{
+	display:flex;
+	font-weight: bold;
+    justify-content: space-between;
+	align-items:center;
+}
+.exchange .sort-icon{
+	display: block;
+    background-color: black;
+    width: 10px;
+    height: 10px;
+    cursor: pointer;
+}
+.exchange .sort-icon:hover{
+	background-color: #999;
+    -webkit-transition: all ease .2s;
+    transition: all ease .2s;
+}
+.exchange .table-header .sort-asc{
+	clip-path: polygon(50% 0px, 0px 86.6%, 100% 86.6%);
+}
+.exchange .table-header .sort-desc{
+	clip-path: polygon(50% 100%, 0px 13.4%, 100% 13.4%);
+}
+.exchange .table .form-control {
+    padding: 0px 10px;
+}
+.exchange .table .btn {
+    padding: 0px 12px;
+}
+.exchange .btn:active, .exchange .btn:focus{
+	border-color:none;
+	box-shadow:none;
+}
+.exchange .table .fa{
+	margin-left:5px;
+}
