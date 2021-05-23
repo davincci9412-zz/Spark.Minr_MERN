@@ -45,7 +45,7 @@ const Menu = ({ ActivePage }) => {
 const Menu = ({ ActivePage }) => {
   return (
     <Box flex="0 0 230px" borderRight="1px solid #ddd" display={['none', 'block']}>
-      <Link to="/exchange" className={ActivePage === 0 ? 'menu-item active' : 'menu-item'}>
+      <Link to="/dashboard" className={ActivePage === 0 ? 'menu-item active' : 'menu-item'}>
         <Text className="fa fa-credit-card" fontSize="30px" color="#efc35c"></Text>&nbsp;&nbsp;
         <Text fontFamily="16px" fontWeight="500">
           My Wallet
