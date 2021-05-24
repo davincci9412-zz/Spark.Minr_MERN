@@ -628,10 +628,20 @@ class Table2 extends React.Component {
   }
 }
 
+class Loading extends React.Component {
+  render(){
+	if (this.props.loading) {
+		return <div className="justify-content-center navbar mb-3"><img width="100" height="100" src="/2.gif"/></div>
+	} else {
+		return <div></div>
+	}
+  }
+}
+
 class Token extends React.Component {
   constructor(props) {
 	super(props);
-	this.state = { datas: datasByRow, counter: datasByRow.length, symbols: symbolByRow, symbol_counter: symbolByRow.length};
+	this.state = { datas: datasByRow, counter: datasByRow.length, symbols: symbolByRow, symbol_counter: symbolByRow.length, loading:false};
 	this.onDelete = this.onDelete.bind(this);
 	this.onCreate = this.onCreate.bind(this);
 	this.onUpdate = this.onUpdate.bind(this);
@@ -671,7 +681,7 @@ class Token extends React.Component {
   }
   
   async onCreate(token, exchange1, exchange1_symbol, exchange2, exchange2_symbol, exchange3, exchange3_symbol, potential, percentage, buy, sell, status, transaction, trend, buy_fee, transfer_fee, sell_fee, buffer_fee, total, buy_token_input, after_purchase, after_transfer, trading, pair_price, post_transfer, BNB_price, BNBs, token_price, new_tokens, increase){
-	
+	this.setState({loading : true})
     await fetch("https://api.pancakeswap.info/api/tokens/"+token).then(async response => {
 		const data = await response.json();
 		exchange1= data.data.price.substring(0, 10);
@@ -703,8 +713,8 @@ class Token extends React.Component {
 			console.error(err);
 		})
 
-trackPromise(	
-	fetch("https://api.coingecko.com/api/v3/coins/binance-smart-chain/contract/"+token+"/market_chart/?vs_currency=usd&days=1").then(async response => {
+
+	await fetch("https://api.coingecko.com/api/v3/coins/binance-smart-chain/contract/"+token+"/market_chart/?vs_currency=usd&days=1").then(async response => {
 		const data = await response.json();
 		/*
 		if (!response.ok) {
@@ -721,7 +731,6 @@ trackPromise(
 	.catch(error => {
 		transaction="Token incorrect"		
 	})
-)
 
 	await fetch("https://api.coingecko.com/api/v3/simple/price?ids=safemoon&vs_currencies=usd").then(async response => {
 		const data = await response.json();
@@ -770,6 +779,7 @@ trackPromise(
 		
     this.setState({datas: this.state.datas.concat([{ token:token, exchange1:exchange1, exchange1_symbol:exchange1_symbol, exchange2:exchange2, exchange2_symbol:exchange2_symbol, exchange3:exchange3, exchange3_symbol:exchange3_symbol, potential:potential, percentage:percentage, buy:buy, sell:sell, status:status, transaction:transaction, trend:trend, buy_fee:buy_fee, sell_fee:sell_fee, transfer_fee:transfer_fee, buffer_fee:buffer_fee, total:total, buy_token_input:buy_token_input, after_purchase:after_purchase, after_transfer:after_transfer, trading:trading, pair_price:pair_price, post_transfer:post_transfer, BNB_price:BNB_price, BNBs:BNBs, token_price:token_price, new_tokens:new_tokens, increase:increase}])})
 	
+	this.setState({loading : false})
   }
 
   render(){
@@ -777,7 +787,7 @@ trackPromise(
 				<div className="mb-5">
 					<h3>Token</h3>
 					<Inputs onCreate={this.onCreate}/>
-					<LoadingIndicator/>
+					<Loading loading={this.state.loading}/>
 					<div>
 						<Table datas={this.state.datas} onDelete={this.onDelete} />
 					</div>
