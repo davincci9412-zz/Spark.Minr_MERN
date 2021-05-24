@@ -48,6 +48,7 @@ const symbolByRow = [
 	{exchange1: ' ', exchange2: 'XLM' , exchange3: 'XLM'},
 	{exchange1: ' ', exchange2: 'SNX' , exchange3: 'SNX'},
 	{exchange1: ' ', exchange2: 'HOGL' , exchange3: 'HOGL'},
+	{exchange1: ' ', exchange2: 'ETH' , exchange3: 'ETH'},
 	{exchange1: ' ', exchange2: 'BSV' , exchange3: 'BSV'},
 	{exchange1: ' ', exchange2: 'TUSD' , exchange3: 'TUSD'},
 	{exchange1: ' ', exchange2: 'BTC' , exchange3: 'BTC'},
