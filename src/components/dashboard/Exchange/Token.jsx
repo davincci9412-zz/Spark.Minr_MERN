@@ -746,13 +746,13 @@ trackPromise(
 		console.error('There was an error!', error);
 	})
 	
-	if (trend - potential) {status = "Red"; trend="Negative"} else { status = "Green"; trend="Positive"}	
 	
 	const max = Math.max(Number(exchange1), exchange2, exchange3);
 	const min = Math.min(Number(exchange1), exchange2, exchange3);		
 	potential = (max-min).toFixed(8)
 	
 	percentage = (min/max*100).toFixed(2);
+	if (percentage > 30) {status = "Green"; trend="Positive"} else { status = "Red"; trend="Negative"}	
 	
 	if (max == exchange1) { sell = "Sell E1";
 	} else if (max == exchange2){ sell = "Sell E2";
