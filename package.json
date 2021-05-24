@@ -55,7 +55,7 @@
   },
   "scripts": {
     "start-dev": "react-scripts start",
-    "start": "nf --procfile Procfile-dev --port 3120 start",
+    "start": "nf --procfile Procfile-dev --port 3000 start",
     "build": "react-scripts build",
     "test:app": "react-scripts test",
     "test:contracts": "mocha",
