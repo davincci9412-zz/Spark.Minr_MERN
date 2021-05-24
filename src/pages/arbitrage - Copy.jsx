@@ -17,16 +17,6 @@ class Arbitrage extends Component {
     }
   }
 
-  // componentWillMount() {
-  //   let token = localStorage.getItem("token");
-  //   if (!token || token === "false") {
-  //     console.log('token', token)
-  //     this.setState({
-  //       isAutherized: true
-  //     })
-  //   }
-  // }
-
   render() {
     const TokenContents = [
       [

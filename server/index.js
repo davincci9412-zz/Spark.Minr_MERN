@@ -41,7 +41,6 @@ app.use('', service)
 // Start the server
 const PORT = process.env.REACT_APP_SERVER_PORT || 8080;
 
-console.log(PORT)
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
   console.log('Press Ctrl+C to quit.');

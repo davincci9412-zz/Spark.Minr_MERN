@@ -16,16 +16,6 @@ class Tracker extends Component {
     }
   }
 
-  // componentWillMount() {
-  //   let token = localStorage.getItem("token");
-  //   if (!token || token === "false") {
-  //     console.log('token', token)
-  //     this.setState({
-  //       isAutherized: true
-  //     })
-  //   }
-  // }
-
   render() {
     const TokenContents = [
       ['0x7122C911045951158a14Ce2CE201fs452cc51458', 1, 'Sold 500k Tokens of Safemon'],

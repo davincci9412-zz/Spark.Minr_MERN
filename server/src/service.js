@@ -21,7 +21,6 @@ const validateLoginInput = require('../validation/login');
 
 router.post('/register', (req, res) => {
   const { errors, isValid } = validateLoginInput(req.body);
-  console.log(req.body);
   // Check validation
   if (!isValid) {
     return res.status(400).json(errors);
@@ -41,11 +40,9 @@ router.post('/register', (req, res) => {
           newUser
             .save()
             .then((user) => {
-              console.log(user);
               res.json({ success: 'User registered sucessfully.' });
             })
             .catch((err) => {
-              console.log(err);
               res.status(400).json({ failed: 'Error ocurred.' });
             });
         });
@@ -56,7 +53,6 @@ router.post('/register', (req, res) => {
 
 router.post('/login', (req, res) => {
   const { errors, isValid } = validateLoginInput(req.body);
-  console.log(req.body);
   // Check validation
   if (!isValid) {
     return res.status(400).json(errors);
@@ -107,10 +103,8 @@ const request = require('postman-request');
 
 router.get('/exchange2', (req, res) => {
 	var url  = 'https://api-cloud.bitmart.com/spot/v1/ticker?symbol='+req.query.symbol+'_USDT'
-	console.log(url);
 	request(url, function (error, response, body) {
 		return res.status(200).json(body);
-		//console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received/
 	});
 });
 
@@ -118,7 +112,6 @@ router.get('/exchange3', (req, res) => {
 	var url  = 'https://whitebit.com/api/v1/public/ticker?market='+req.query.symbol+'_USDT'
 	request(url, function (error, response, body) {
 		return res.status(200).json(body);
-		//console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received/
 	});
 });
 

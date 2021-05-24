@@ -645,7 +645,6 @@ class Token extends React.Component {
 	this.onDelete = this.onDelete.bind(this);
 	this.onCreate = this.onCreate.bind(this);
 	this.onUpdate = this.onUpdate.bind(this);
-	console.log(process.env.REACT_APP_SERVER_HOST)
   }
 
   onDelete(id) {
