@@ -5,8 +5,9 @@ const jwt = require('jsonwebtoken');
 const keys = require('../config/keys');
 
 var mongoose = require('mongoose');
+
 mongoose
-  .connect('mongodb://localhost:27017', {
+  .connect(process.env.REACT_APP_MONGO_URL, {
     dbName: 'mockUsers',
     useNewUrlParser: true,
     useUnifiedTopology: true,

@@ -7,7 +7,7 @@ import { GET_ERRORS, SET_CURRENT_USER, USER_LOADING } from './types';
 // Register User
 export const registerUser = (userData, history) => dispatch => {
   axios
-    .post('http://localhost:8080/register', userData)
+    .post(process.env.REACT_APP_SERVER_URL+'/register', userData)
     .then(res => history.push('/login'))
     .catch(err =>{return Promise.reject(err);}      
     );
@@ -16,7 +16,7 @@ export const registerUser = (userData, history) => dispatch => {
 // Login - get user token
 export const loginUser = userData => dispatch => {
   axios
-    .post('http://localhost:8080/login', userData)
+    .post(process.env.REACT_APP_SERVER_URL+'/login', userData)
     .then(res => {
       // Save to localStorage
 

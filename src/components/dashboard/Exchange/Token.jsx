@@ -1,4 +1,4 @@
-import React, { Component }  from 'react';
+import React from 'react';
 import axios from 'axios';
 import { usePromiseTracker } from "react-promise-tracker";
 import Loader from 'react-loader-spinner';
@@ -635,6 +635,7 @@ class Token extends React.Component {
 	this.onDelete = this.onDelete.bind(this);
 	this.onCreate = this.onCreate.bind(this);
 	this.onUpdate = this.onUpdate.bind(this);
+	console.log(process.env.REACT_APP_SERVER_HOST)
   }
 
   onDelete(id) {
@@ -676,10 +677,10 @@ class Token extends React.Component {
 		exchange1= data.data.price.substring(0, 10);
 		exchange1_symbol = data.data.symbol;
 		this.state.symbols.map((data, i) => {
-			if (exchange1_symbol == data.exchange2 ) {
+			if (exchange1_symbol === data.exchange2 ) {
 				exchange2_symbol = data.exchange2;
 				exchange3_symbol = data.exchange3;
-			} else if (exchange1_symbol == data.exchange3){
+			} else if (exchange1_symbol === data.exchange3){
 				exchange3_symbol = data.exchange1_symbol; exchange2_symbol = "";
 			}
 		})
@@ -688,14 +689,14 @@ class Token extends React.Component {
 		exchange1="Token incorrect"	
 	})
 
-	await axios.get('http://localhost:8080/exchange2', { params : { symbol: exchange2_symbol}}).then( async res => {
+	await axios.get(process.env.REACT_APP_SERVER_URL+'/exchange2', { params : { symbol: exchange2_symbol}}).then( async res => {
 			const data = await JSON.parse(res.data).data.tickers[0];
 			exchange2 = data.best_ask;
 		}).catch(err => {
 			console.error(err);
 		})
 	
-	await axios.get('http://localhost:8080/exchange3?symbol='+exchange3_symbol).then( async res => {
+	await axios.get(process.env.REACT_APP_SERVER_URL+'/exchange3?symbol='+exchange3_symbol).then( async res => {
 			  const data = await JSON.parse(res.data);
 			  exchange3 = data.result.ask;
 		}).catch(err => {
@@ -754,13 +755,13 @@ trackPromise(
 	percentage = (min/max*100).toFixed(2);
 	if (percentage > 30) {status = "Green"; trend="Positive"} else { status = "Red"; trend="Negative"}	
 	
-	if (max == exchange1) { sell = "Sell E1";
-	} else if (max == exchange2){ sell = "Sell E2";
+	if (max === exchange1) { sell = "Sell E1";
+	} else if (max === exchange2){ sell = "Sell E2";
 	} else { sell = "Sell E3";
 	}
 	
-	if (min == exchange1) { buy = "Buy E1";
-	} else if (max == exchange2){ buy = "Buy E2";
+	if (min === exchange1) { buy = "Buy E1";
+	} else if (max === exchange2){ buy = "Buy E2";
 	} else { buy = "Buy E3";
 	}	
 	

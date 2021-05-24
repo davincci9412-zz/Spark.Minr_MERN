@@ -12,6 +12,7 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "dotenv": "^9.0.2",
+    "env-cmd": "^10.1.0",
     "express": "^4.17.1",
     "foreman": "^3.0.1",
     "is-empty": "^1.2.0",
@@ -55,8 +56,8 @@
   },
   "scripts": {
     "start-dev": "react-scripts start",
-    "start": "nf --procfile Procfile-dev --port 3000 start",
-    "build": "react-scripts build",
+    "start": "env-cmd -f .env nf --procfile Procfile-dev --port 3000 start",
+    "build": "env-cmd -f .env react-scripts build",
     "test:app": "react-scripts test",
     "test:contracts": "mocha",
     "eject": "react-scripts eject",
@@ -81,6 +82,5 @@
       "last 1 safari version"
     ]
   },
-  "prettier": "@blockstack/prettier-config",
-  "proxy": "http://localhost:8080"
+  "prettier": "@blockstack/prettier-config"
 }

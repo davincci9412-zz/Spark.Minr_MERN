@@ -39,7 +39,7 @@ app.use('', service)
 // router.post('/login', getLogin)
 
 // Start the server
-const PORT = process.env.SERVER_PORT || 8080;
+const PORT = process.env.REACT_APP_SERVER_PORT || 8080;
 
 console.log(PORT)
 app.listen(PORT, () => {
