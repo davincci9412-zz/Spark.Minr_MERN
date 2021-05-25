@@ -648,6 +648,7 @@ class Token extends React.Component {
   }
 
   onDelete(id) {
+	  location.reload();
 	const data_list = this.state.datas;
 	data_list.splice(id, 1);
 	this.setState({datas: data_list, counter: data_list.length});
@@ -756,20 +757,20 @@ class Token extends React.Component {
 	})
 	
 	
-	const max = Math.max(Number(exchange1), exchange2, exchange3);
-	const min = Math.min(Number(exchange1), exchange2, exchange3);		
+	const max = Math.max(Number(exchange1), Number(exchange2), Number(exchange3));
+	const min = Math.min(Number(exchange1), Number(exchange2), Number(exchange3));		
 	potential = (max-min).toFixed(8)
 	
-	percentage = (min/max*100).toFixed(2);
+	percentage = (100-(min/max*100)).toFixed(2);
 	if (percentage > 30) {status = "Green"; trend="Positive"} else { status = "Red"; trend="Negative"}	
 	
-	if (max === exchange1) { sell = "Sell E1";
-	} else if (max === exchange2){ sell = "Sell E2";
+	if (max === Number(exchange1)) { sell = "Sell E1";
+	} else if (max === Number(exchange2)){ sell = "Sell E2";
 	} else { sell = "Sell E3";
 	}
 	
-	if (min === exchange1) { buy = "Buy E1";
-	} else if (max === exchange2){ buy = "Buy E2";
+	if (min === Number(exchange1)) { buy = "Buy E1";
+	} else if (max === Number(exchange2)){ buy = "Buy E2";
 	} else { buy = "Buy E3";
 	}	
 	
