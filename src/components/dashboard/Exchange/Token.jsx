@@ -720,10 +720,9 @@ class Token extends React.Component {
 			const error = (data && data.message) || response.statusText;	
 		}*/
 		transaction = 0;
-		status = 1;
 		data["total_volumes"].map(function(object, i){
 			transaction = transaction + object[1];
-			status = i++;
+			status = i+1;
 		})
 		transaction = parseInt(transaction / status);
 	})
