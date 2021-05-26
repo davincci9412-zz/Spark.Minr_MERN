@@ -648,7 +648,6 @@ class Token extends React.Component {
   }
 
   onDelete(id) {
-	  location.reload();
 	const data_list = this.state.datas;
 	data_list.splice(id, 1);
 	this.setState({datas: data_list, counter: data_list.length});
