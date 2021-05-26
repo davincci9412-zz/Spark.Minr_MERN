@@ -754,7 +754,19 @@ class Token extends React.Component {
 		console.error('There was an error!', error);
 	})
 	
-	
+/*	switch(this.props.value) {
+            case 1:
+              return this.myComponentMethod();
+              break;
+            case 2: 
+              return () => { return <AnotherComponent/> }; 
+              break;
+            case 3:
+              return <div>1</div>; 
+              break;
+            default: return null; break;
+          }
+		  */
 	const max = Math.max(Number(exchange1), Number(exchange2), Number(exchange3));
 	const min = Math.min(Number(exchange1), Number(exchange2), Number(exchange3));		
 	potential = (max-min).toFixed(8)
@@ -768,7 +780,7 @@ class Token extends React.Component {
 	}
 	
 	if (min === Number(exchange1)) { buy = "Buy E1";
-	} else if (max === Number(exchange2)){ buy = "Buy E2";
+	} else if (min === Number(exchange2)){ buy = "Buy E2";
 	} else { buy = "Buy E3";
 	}	
 	
