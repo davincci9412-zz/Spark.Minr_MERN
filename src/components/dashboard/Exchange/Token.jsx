@@ -1,28 +1,7 @@
 import React from 'react';
 import axios from 'axios';
-import { usePromiseTracker } from "react-promise-tracker";
-import Loader from 'react-loader-spinner';
-import { trackPromise } from 'react-promise-tracker';
 
-const LoadingIndicator = props => {
-  const { promiseInProgress } = usePromiseTracker();
-  return promiseInProgress && <div
-      style={{
-        width: "100%",
-        height: "100",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center"
-      }}
-    >
-      <Loader type="ThreeDots" color="#2BAD60" height="100" width="100" />
-    </div>
-};
-
-const datasByRow = [
-  
-];
-
+const datasByRow = [];
 const symbolByRow = [
 	{exchange1: ' ', exchange2: 'PAX' , exchange3: 'PAX'},
 	{exchange1: ' ', exchange2: 'TRX', exchange3: 'TRX'},
@@ -336,31 +315,41 @@ class Inputs extends React.Component {
 	const change = {};
 	change[propertyName] = e.target.value;
 	this.setState(change);
-	this.setState({[e.target.name]: e.target.value},  () => { this.validateField(e.target.name, e.target.value) });
+	this.setState({[e.target.name]: e.target.value},  () => { this.validateField(e.target.name, e.target.value, false) });
   }
   handleClear() {
 	this.setState({ token:'', exchange1:'', exchange2:'', exchange3:'', potential:'', percentage:'', buy:'', sell:'', status:'', transaction:'', trend:'', total:''});
   }
   
-  validateField(fieldName, value) {
-    
+  validateField(fieldName, value, valueExist) {
+    if (value.length >=1) { valueExist = true; } else {valueExist = false; }
     switch(fieldName) {
       case 'token':
-        this.state.tokenValid = value.length >= 1;
+        this.setState({tokenValid: valueExist}, ()=>{
+			this.setState({tokenValid: valueExist});
+		})
         break;
 	  case 'buy_fee':
-        this.state.buyValid = value.length >= 1;
+        this.setState({buyValid: valueExist}, ()=>{
+			this.setState({buyValid: valueExist});
+		})
         break;
 	  case 'sell_fee':
-        this.state.sellValid = value.length >= 1;
+        this.setState({sellValid: valueExist}, ()=>{
+			this.setState({sellValid: valueExist});
+		})
         break;
       case 'buffer_fee':
-        this.state.bufferValid = value.length >= 1;
+        this.setState({bufferValid: valueExist}, ()=>{
+			this.setState({bufferValid: valueExist});
+		})
         break;
       default:
         break;
     }
-    this.setState({formValid: this.state.tokenValid && this.state.buyValid && this.state.sellValid && this.state.bufferValid});
+    this.setState({formValid: this.state.tokenValid && this.state.buyValid && this.state.sellValid && this.state.bufferValid}, ()=>{
+		this.setState({formValid: this.state.tokenValid && this.state.buyValid && this.state.sellValid && this.state.bufferValid});
+	})
   }
     
   render(){
@@ -432,7 +421,7 @@ class UpdateButton extends React.Component {
 		this.setState(change);
 	}
 	render(){
-		return <td><div className="input-group"><input type='text' name="buy_token_input" onChange={this.handleChange.bind(this, 'buy_token_input')} className='form-control' /><button type="button" className="input-group-postpend btn btn-success" onClick={this.onClick.bind(this)}>Go</button></div></td>		
+		return <td><div className="input-group"><input type='text' name="buy_token_input" onChange={this.handleChange.bind(this, 'buy_token_input')} value={this.props.value} className='form-control' /><button type="button" className="input-group-postpend btn btn-success" onClick={this.onClick.bind(this)}>Go</button></div></td>		
 	}
 }
 
@@ -583,7 +572,7 @@ class Row2 extends React.Component {
   render(){
 	return  <tr>
 	<Column type='token' placeholder={this.props.token} placesymbol={this.props.exchange1_symbol}/>
-	<UpdateButton type='buy_token' placeholder={this.props.buy_token_input} uuid={this.props.uuid} update={this.props.onUpdate}/>
+	<UpdateButton uuid={this.props.uuid} update={this.props.onUpdate} value={this.props.buy_token_input}/>
 	<Column type='after_purchase' placeholder={this.props.after_purchase} />
 	<Column type='after_transfer' placeholder={this.props.after_transfer} />
 	<Column type='trading' placeholder={this.props.trading} />
@@ -631,7 +620,7 @@ class Table2 extends React.Component {
 class Loading extends React.Component {
   render(){
 	if (this.props.loading) {
-		return <div className="justify-content-center navbar mb-3"><img width="100" height="100" src="/2.gif"/></div>
+		return <div className="justify-content-center navbar mb-3"><img width="100" height="100" src="/2.gif" alt="Please wait for loading"/></div>
 	} else {
 		return <div></div>
 	}
@@ -645,6 +634,7 @@ class Token extends React.Component {
 	this.onDelete = this.onDelete.bind(this);
 	this.onCreate = this.onCreate.bind(this);
 	this.onUpdate = this.onUpdate.bind(this);
+	this.onRefresh = this.onRefresh.bind(this);
   }
 
   onDelete(id) {
@@ -679,6 +669,116 @@ class Token extends React.Component {
 	this.setState({datas: data_list, counter: data_list.length});
   }
   
+  async onRefresh(id, transaction, status, trend){
+	this.setState({loading:true}, ()=>{
+			this.setState({loading:true});
+	})
+
+	await Promise.all(this.state.datas.map(async ( data1, i) => {
+		await fetch("https://api.pancakeswap.info/api/tokens/"+data1.token).then(async response => {
+			const data = await response.json();
+			this.state.datas[i].exchange1= data.data.price.substring(0, 10);
+			this.state.datas[i].exchange1_symbol= data.data.symbol
+			this.state.symbols.map((data, j) => {
+				if (data1.exchange1_symbol === data.exchange2 ) {
+					this.state.datas[i].exchange2_symbol = data.exchange2;
+					this.state.datas[i].exchange3_symbol = data.exchange3;
+				} else if (data1.exchange1_symbol === data.exchange3){
+					this.state.datas[i].exchange3_symbol = data.exchange1_symbol;
+					this.state.datas[i].exchange2_symbol = "";
+				}
+				return this.state;
+			})
+		})
+		.catch(error => {
+			this.state.datas[i].exchange1="Token incorrect"
+		})
+		
+		await axios.get(process.env.REACT_APP_SERVER_URL+'/exchange2', { params : { symbol: data1.exchange2_symbol}}).then( async res => {
+				const data = await JSON.parse(res.data).data.tickers[0];
+				this.state.datas[i].exchange2=data.best_ask;
+			}).catch(err => {
+				console.error(err);
+			})
+	
+		await axios.get(process.env.REACT_APP_SERVER_URL+'/exchange3?symbol='+data1.exchange3_symbol).then( async res => {
+				  const data = await JSON.parse(res.data);
+				  this.state.datas[i].exchange3 = data.result.ask;
+			}).catch(err => {
+				console.error(err);
+			})
+
+		await fetch("https://api.coingecko.com/api/v3/coins/binance-smart-chain/contract/"+data1.token+"/market_chart/?vs_currency=usd&days=1").then(async response => {
+			const data = await response.json();			
+			transaction = 0;
+			status = 0;
+			data["total_volumes"].map(function(object, i){
+				transaction = transaction + object[1];
+				status = i+1;
+				return status;
+			})
+			this.state.datas[i].transaction = parseInt(transaction / status);
+		})
+		.catch(error => {
+			this.state.datas[i].transaction="Token incorrect"		
+		})
+
+		await fetch("https://api.coingecko.com/api/v3/coins/safemoon/market_chart?vs_currency=usd&days=2").then(async response => {
+			const data = await response.json();
+			trend = 0;
+			status = 1;
+			data["prices"].map(function(object, i){
+				if (i>24) {	trend = trend + object[1];    status = i++;	}
+				return status;
+			})
+			status = status - 24;
+			this.state.datas[i].trend = trend / status;
+		})
+		.catch(error => {
+			this.setState({ errorMessage: error.toString() });
+			console.error('There was an error!', error);
+		})
+
+		const max = Math.max(Number(this.state.datas[i].exchange1), Number(this.state.datas[i].exchange2), Number(this.state.datas[i].exchange3));
+		const min = Math.min(Number(this.state.datas[i].exchange1), Number(this.state.datas[i].exchange2), Number(this.state.datas[i].exchange3));		
+		this.state.datas[i].potential = (max-min).toFixed(8)
+		
+		this.state.datas[i].percentage = (100-(min/max*100)).toFixed(2);
+		if (this.state.datas[i].percentage > 30) {this.state.datas[i].status = "Green"; this.state.datas[i].trend="Positive"} else { this.state.datas[i].status = "Red"; this.state.datas[i].trend="Negative"}	
+		
+		if (max === Number(this.state.datas[i].exchange1)) { this.state.datas[i].sell = "Sell E1";
+		} else if (max === Number(this.state.datas[i].exchange2)){ this.state.datas[i].sell = "Sell E2";
+		} else { this.state.datas[i].sell = "Sell E3";
+		}
+		
+		if (min === Number(this.state.datas[i].exchange1)) { this.state.datas[i].buy = "Buy E1";
+		} else if (min === Number(this.state.datas[i].exchange2)){ this.state.datas[i].buy = "Buy E2";
+		} else { this.state.datas[i].buy = "Buy E3";
+		}	
+		
+		this.state.datas[i].transfer_fee = this.state.datas[i].sell_fee;
+		this.state.datas[i].total = Number(this.state.datas[i].buy_fee) + Number(this.state.datas[i].sell_fee) + Number(this.state.datas[i].transfer_fee) + Number(this.state.datas[i].buffer_fee);
+		
+		if (this.state.datas[i].buy_token_input !== undefined && this.state.datas[i].buy_token_input !== "") {
+			await fetch("https://api.pancakeswap.info/api/tokens/"+data1.token).then(async response => {
+				const data = await response.json();
+				this.state.datas[i].BNB_price = (Number(data.data.price) / Number(data.data.price_BNB)).toFixed(0);
+				this.state.datas[i].token_price=(1/Number(data.data.price_BNB)).toFixed(0);
+			})
+			.catch(error => {
+				this.state.datas[i].BNB_price="Did not get"	
+			})
+			
+			this.state.datas[i].BNBs=(this.state.datas[i].post_transfer / this.state.datas[i].BNB_price).toFixed(8);
+			this.state.datas[i].new_tokens=(this.state.datas[i].BNBs * this.state.datas[i].token_price).toFixed(2);
+			this.state.datas[i].increase=(this.state.datas[i].new_tokens - this.state.datas[i].buy_token_input).toFixed(2);	
+		}
+	}))
+    this.setState({loading : false})
+  }
+  
+ 
+
   async onCreate(token, exchange1, exchange1_symbol, exchange2, exchange2_symbol, exchange3, exchange3_symbol, potential, percentage, buy, sell, status, transaction, trend, buy_fee, transfer_fee, sell_fee, buffer_fee, total, buy_token_input, after_purchase, after_transfer, trading, pair_price, post_transfer, BNB_price, BNBs, token_price, new_tokens, increase){
 	this.setState({loading : true})
     await fetch("https://api.pancakeswap.info/api/tokens/"+token).then(async response => {
@@ -692,6 +792,7 @@ class Token extends React.Component {
 			} else if (exchange1_symbol === data.exchange3){
 				exchange3_symbol = data.exchange1_symbol; exchange2_symbol = "";
 			}
+			return this.state;
 		})
 	})
 	.catch(error => {
@@ -723,28 +824,21 @@ class Token extends React.Component {
 		data["total_volumes"].map(function(object, i){
 			transaction = transaction + object[1];
 			status = i+1;
+			return status;
 		})
 		transaction = parseInt(transaction / status);
 	})
 	.catch(error => {
 		transaction="Token incorrect"		
 	})
-
-	await fetch("https://api.coingecko.com/api/v3/simple/price?ids=safemoon&vs_currencies=usd").then(async response => {
-		const data = await response.json();
-		potential = data.safemoon.usd;
-	})
-	.catch(error => {
-		this.setState({ errorMessage: error.toString() });
-		console.error('There was an error!', error);
-	})
-
-	await fetch("https://api.coingecko.com/api/v3/coins/safemoon/market_chart?vs_currency=usd&days=2").then(async response => {
+ 
+    await fetch("https://api.coingecko.com/api/v3/coins/safemoon/market_chart?vs_currency=usd&days=2").then(async response => {
 		const data = await response.json();
 		trend = 0;
 		status = 1;
 		data["prices"].map(function(object, i){
 			if (i>24) {	trend = trend + object[1];    status = i++;	}
+			return status;
 		})
 		status = status - 24;
 		trend = trend / status;
@@ -793,32 +887,40 @@ class Token extends React.Component {
   }
 
   render(){
-	return  <div className="container-fluid exchange small">
-				<div className="mb-5">
-					<h3>Token</h3>
-					<Inputs onCreate={this.onCreate}/>
-					<Loading loading={this.state.loading}/>
-					<div>
-						<Table datas={this.state.datas} onDelete={this.onDelete} />
-					</div>
+	return  <div className="exchange">
+				<div className="top-bar">
+					<h3 className="page-title">Exchange Arbitrage</h3>
+					<button className="refresh btn" onClick={this.onRefresh}>Refresh</button>
 				</div>
-				<div className="row">
-					<div className="col-md-8 mb-5">
-						<h3>Tax Calculation</h3>					
+				<div className="container-fluid small" datas={this.state.datas} >
+					<div className="mb-5">
+						<h3>Token</h3>
+						<Inputs onCreate={this.onCreate}/>
+						<Loading loading={this.state.loading}/>
 						<div>
-							<Table1 datas={this.state.datas}  />
+							<Table datas={this.state.datas} onDelete={this.onDelete} />
 						</div>
 					</div>
-				</div>
-				<div className="mb-5">
-					<h3>Net Calculation</h3>					
-					<div>
-						<Table2 datas={this.state.datas} onUpdate={this.onUpdate}/>
+					<div className="row">
+						<div className="col-md-8 mb-5">
+							<h3>Tax Calculation</h3>					
+							<div>
+								<Table1 datas={this.state.datas}  />
+							</div>
+						</div>
 					</div>
-				</div>
-			</div>	
+					<div className="mb-5">
+						<h3>Net Calculation</h3>					
+						<div>
+							<Table2 datas={this.state.datas} onUpdate={this.onUpdate} />
+						</div>
+					</div>
+				</div>	
+			</div>
 
   }
 }
-
+	
 export default Token;
+
+
