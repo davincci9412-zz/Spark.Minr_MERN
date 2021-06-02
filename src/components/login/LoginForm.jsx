@@ -39,7 +39,7 @@ const LoginForm = ({ SigninOrUp, EventHandler, Errors }) => {
     EventHandler(userData);
   };
 
-  // useEffect(() => {}, []);
+  //useEffect(() => {}, []);
 
   return (
     <Flex flexWrap="wrap" width={['100%', '83.3%']} mx="auto" overflow="hidden">

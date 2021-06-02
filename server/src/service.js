@@ -3,11 +3,13 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const keys = require('../config/keys');
+const dotenv = require('dotenv');
+const env = dotenv.config().parsed;
 
 var mongoose = require('mongoose');
 
 mongoose
-  .connect(process.env.REACT_APP_MONGO_URL, {
+  .connect(env.REACT_APP_MONGO_URL, {
     dbName: 'mockUsers',
     useNewUrlParser: true,
     useUnifiedTopology: true,

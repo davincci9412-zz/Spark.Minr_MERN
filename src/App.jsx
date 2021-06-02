@@ -13,7 +13,7 @@ import Arbitrage from './pages/arbitrage';
 import Tracker from './pages/tracker';
 import Register from './pages/register';
 import Login from './pages/login';
-
+import Tracker1 from './pages/tracker1';
 
 // Check for token to keep user logged in
 if (localStorage.jwtToken) {
@@ -50,6 +50,7 @@ class App extends Component {
               <Route exact path="/dashboard" component={Dashboard} />
               <Route exact path="/exchange" component={Arbitrage} />
               <Route exact path="/tracker" component={Tracker} />
+              <Route exact path="/tracker1" component={Tracker1} />
               <Route exact path="/login" component={Login} />
               <Redirect to="/login" />
             </Switch>

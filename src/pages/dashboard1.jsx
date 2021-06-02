@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import { Box, Flex } from '@blockstack/ui';
 
 import Menu from '../components/dashboard/Menu';
-import WalletsTracked from '../components/dashboard/Tracker/WalletsTracked';
+//import Footer from '../components/dashboard/Footer';
+import Wallet1 from '../components/dashboard/Wallet1';
 import { logoutUser } from '../actions/authActions';
 
 class Dashboard extends Component {
@@ -15,6 +16,10 @@ class Dashboard extends Component {
   }
 
   render() {
+    const WalletContents = [
+      ['BTC', 7, 19.5, 19.5, 19.5, 18, 1],
+      ['Safe Moon', 10, 19.5, 19.5, 19.5, -9, 0],
+    ];
     return (
       <Flex alignItems="stretch">
         <Menu ActivePage={0} />
@@ -23,7 +28,7 @@ class Dashboard extends Component {
           maxWidth={['100%', 'calc(100% - 230px)']}
         >
           <Box>          
-            <WalletsTracked />
+            <Wallet1 WalletName="Wallet" TableContents={WalletContents} />
           </Box>
         </Box>
       </Flex>
@@ -43,4 +48,3 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, { logoutUser })(Dashboard);
-

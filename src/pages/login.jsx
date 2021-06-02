@@ -9,15 +9,15 @@ import { loginUser } from '../actions/authActions';
 class Login extends Component {
   componentDidMount() {
     if (this.props.auth.isAuthenticated) {
-      //this.props.history.push('/dashboard');
-	    this.props.history.push('/exchange');
+      this.props.history.push('/dashboard');
+	    //this.props.history.push('/exchange');
     }
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.auth.isAuthenticated) {
-      //this.props.history.push('/dashboard');
-	    this.props.history.push('/exchange');
+      this.props.history.push('/dashboard');
+	    //this.props.history.push('/exchange');
     }
 
     if (nextProps.errors) {

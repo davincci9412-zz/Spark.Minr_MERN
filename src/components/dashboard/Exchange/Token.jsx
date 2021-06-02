@@ -867,6 +867,7 @@ class Token extends React.Component {
 	
 	percentage = (100-(min/max*100)).toFixed(2);
 	if (percentage > 30) {status = "Green"; trend="Positive"} else { status = "Red"; trend="Negative"}	
+	//if (trend - potential) {status = "Red"; trend="Negative"} else { status = "Green"; trend="Positive"}	
 	
 	if (max === Number(exchange1)) { sell = "Sell E1";
 	} else if (max === Number(exchange2)){ sell = "Sell E2";
