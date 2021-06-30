@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { Box, Flex } from '@blockstack/ui';
 
 import Menu from '../components/dashboard/Menu';
+import Header from '../components/common/Header.jsx';
+import Footer from '../components/common/Footer.jsx';
 import WalletsTracked from '../components/dashboard/Tracker/WalletsTracked';
 import { logoutUser } from '../actions/authActions';
 
@@ -17,14 +19,13 @@ class Dashboard extends Component {
   render() {
     return (
       <Flex alignItems="stretch">
-        <Menu ActivePage={0} />
-        <Box
-          flex={['0 0 100%', '0 0 calc(100% - 230px)']}
-          maxWidth={['100%', 'calc(100% - 230px)']}
-        >
-          <Box>          
+        <Menu ActivePage={1} />
+        <Box className="main-body">          
+          <Header/>
+		  <Box>          
             <WalletsTracked />
           </Box>
+		  <Footer/>
         </Box>
       </Flex>
     );

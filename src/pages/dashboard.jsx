@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { Box, Flex } from '@blockstack/ui';
 
 import Menu from '../components/dashboard/Menu';
+import Header from '../components/common/Header.jsx';
+import Footer from '../components/common/Footer.jsx';
 import Wallet from '../components/dashboard/Wallet';
 import { logoutUser } from '../actions/authActions';
 
@@ -13,22 +15,18 @@ class Dashboard extends Component {
       this.props.history.push('/');
     }
   }
+  
 
   render() {
-    const WalletContents = [
-      ['BTC', 7, 19.5, 19.5, 19.5, 18, 1],
-      ['Safe Moon', 10, 19.5, 19.5, 19.5, -9, 0],
-    ];
     return (
       <Flex alignItems="stretch">
         <Menu ActivePage={0} />
-        <Box
-          flex={['0 0 100%', '0 0 calc(100% - 230px)']}
-          maxWidth={['100%', 'calc(100% - 230px)']}
-        >
+        <Box className="main-body"> 
+		  <Header/>
           <Box>          
-            <Wallet WalletName="Wallet" TableContents={WalletContents} />
+            <Wallet WalletName="Wallet" />
           </Box>
+		  <Footer/>
         </Box>
       </Flex>
     );

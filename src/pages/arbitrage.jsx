@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { Box, Flex } from '@blockstack/ui';
 import Menu from '../components/dashboard/Menu';
 import Token from '../components/dashboard/Exchange/Token';
+import Header from '../components/common/Header.jsx';
+import Footer from '../components/common/Footer.jsx';
 
 import { logoutUser } from '../actions/authActions';
 
@@ -15,48 +17,16 @@ class Arbitrage extends Component {
   }
 
   render() {
-    const TokenContents = [
-      [
-        ['Safemoon', 'USDT'],
-        [0.0003, 19.5],
-        [0.0003, 19.5],
-        [0.0003, 19.5],
-        ['Safemoon', 'USDT'],
-        70.53,
-        'Buy E3',
-        'Sell E.T',
-        '',
-        'Green',
-        '1234567890',
-        1,
-      ],
-      [
-        ['Safemoon', 'USDT'],
-        [0.0002, 19.6],
-        [0.0003, 19.5],
-        [0.0003, 19.5],
-        ['Safemoon', 'USDT'],
-        30.53,
-        'Buy E3',
-        'Sell E.T',
-        '',
-        'Green',
-        '1234567890',
-        1,
-      ],
-    ];
     return (
       <Flex alignItems="stretch">
-        <Menu ActivePage={1} />
-        <Box
-          flex={['0 0 100%', '0 0 calc(100% - 230px)']}
-          maxWidth={['100%', 'calc(100% - 230px)']}
-        >          
+        <Menu ActivePage={2} />
+        <Box className="main-body">          
           <Box>
-            <Token
+            <Header/>
+			<Token
               TableFields={['Token', 'Buy', 'Transfer', 'Sell', 'Buffer', 'TOTOAL']}
-              TableContents={TokenContents}
-            />            
+            />  
+			<Footer/>			
           </Box>
         </Box>
       </Flex>

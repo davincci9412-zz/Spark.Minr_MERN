@@ -5,7 +5,6 @@ import jwt_decode from 'jwt-decode';
 
 import { setCurrentUser, logoutUser } from './actions/authActions';
 import setAuthToken from './utils/setAuthToken';
-import Header from './components/common/Header';
 import store from './store';
 
 import Dashboard from './pages/dashboard';
@@ -43,8 +42,7 @@ class App extends Component {
     return (
       <Provider store={store}>
         <Router>
-          <div className="App">
-            <Header />
+          <div className="App">            
             <Switch>
               <Route exact path="/register" component={Register} />
               <Route exact path="/dashboard" component={Dashboard} />

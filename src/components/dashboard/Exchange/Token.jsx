@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import Delete from '../../../assets/images/delete-icon.png';
 
 const datasByRow = [];
 const symbolByRow = [
@@ -353,35 +354,33 @@ class Inputs extends React.Component {
   }
     
   render(){
-	return  <div className='row my-3'>
-	  <Input name='token' change={this.handleChange.bind(this, 'token')} value={this.state.token} placeholder='Token' />
-	  <Input0 name='buy_fee' change={this.handleChange.bind(this, 'buy_fee')} value={this.state.buy_fee} placeholder='Fees In' />
-	  <Input0 name='sell_fee' change={this.handleChange.bind(this, 'sell_fee')} value={this.state.sell_fee} placeholder='Fees Out' />
-	  <Input0 name='buffer_fee' change={this.handleChange.bind(this, 'buffer_fee')} value={this.state.buffer_fee} placeholder='Buffer Fee' />
-	  <div className='col-md-1'><AddButton newData={this.state} create={this.props.onCreate} clear={this.handleClear} disabled={!this.state.formValid}/></div>
-	  <div className="col-md-2"></div>
-	  <div className="col-md-3 mt-3">
+	return  <div className='search-box row'>
+	  <div className='col-md-4'><Input name='token' change={this.handleChange.bind(this, 'token')} value={this.state.token} placeholder='Token' /></div>
+	  <div className='col-md-2'><Input0 name='buy_fee' change={this.handleChange.bind(this, 'buy_fee')} value={this.state.buy_fee} placeholder='Fees In' /></div>
+	  <div className='col-md-2'><Input0 name='sell_fee' change={this.handleChange.bind(this, 'sell_fee')} value={this.state.sell_fee} placeholder='Fees Out' /></div>
+	  <div className='col-md-2'><Input0 name='buffer_fee' change={this.handleChange.bind(this, 'buffer_fee')} value={this.state.buffer_fee} placeholder='Buffer Fee' /></div>
+	  <div className='col-md-2 text-right'><AddButton newData={this.state} create={this.props.onCreate} clear={this.handleClear} disabled={!this.state.formValid}/></div>
+	    
+	</div>
+  }
+}
+/*	<div className="col-md-2"></div>	
+	<div className="col-md-3 mt-3">
 		<ul className="navbar-nav ">
 			<li className="nav-item"><a href="https://coinmarketcap.com/" target='_blank' className="out-link" rel="noreferrer">Coin Market Cap</a></li>
 			<li className="nav-item"><a href="https://coingecko.com/" target='_blank' className="out-link" rel="noreferrer">CoinGecko</a></li>
 			<li className="nav-item"><a href="https://poocoin.app/" target='_blank' className="out-link" rel="noreferrer">Poocoin</a></li>
 			<li className="nav-item"><a href="https://bscscan.com/" target='_blank' className="out-link" rel="noreferrer">BSC Scan</a></li>
 		</ul>
-	  </div>
-	</div>
-  }
-}
-
+	  </div>*/
 class Input extends React.Component {
   constructor(props) {
 	super(props);
 	this.state = { value: this.props.value };
   }
   render(){
-	return <div className='col-md-3'>
-	  <input type='text' name={this.props.name} placeholder={this.props.placeholder} onChange={this.props.change} value={this.props.value} className='form-control'/>
-	</div>
-  }
+	return <input type='text' name={this.props.name} autoComplete="off" placeholder={this.props.placeholder} onChange={this.props.change} value={this.props.value} className='form-control'/>
+	}
 }
 
 class Input0 extends React.Component {
@@ -390,12 +389,10 @@ class Input0 extends React.Component {
 	this.state = { value: this.props.value };
   }
   render(){
-	return <div className='col-md-1'>
-		<div className="input-group">
-			<input type='text' name={this.props.name} placeholder={this.props.placeholder} onChange={this.props.change} value={this.props.value} className='form-control'/>
+	return <div className="input-group">
+			<input type='text' name={this.props.name} autoComplete="off" placeholder={this.props.placeholder} onChange={this.props.change} value={this.props.value} className='form-control'/>
 			<div className="input-group-postpend"><div className="input-group-text">%</div></div>
-		</div>	  
-	</div>
+		</div>
   }
 }
 
@@ -406,7 +403,7 @@ class DeleteButton extends React.Component {
 	
 	render(){
 		return <td>
-		  <button type="button" className="btn btn-danger" onClick={this.onClick.bind(this)}>Delete</button>
+		  <div className="cursor text-center" onClick={this.onClick.bind(this)} autoComplete="off" ><img src={Delete} alt="Delete"/></div>
 		</td>
 	}
 }
@@ -421,7 +418,7 @@ class UpdateButton extends React.Component {
 		this.setState(change);
 	}
 	render(){
-		return <td><div className="input-group"><input type='text' name="buy_token_input" onChange={this.handleChange.bind(this, 'buy_token_input')} value={this.props.value} className='form-control' /><button type="button" className="input-group-postpend btn btn-success" onClick={this.onClick.bind(this)}>Go</button></div></td>		
+		return <td><div className="input-group"><input type='text' name="buy_token_input" onChange={this.handleChange.bind(this, 'buy_token_input')} value={this.props.value} autoComplete="off"  className='update-input form-control' /><button type="button" className="btn" onClick={this.onClick.bind(this)}>Go</button></div></td>		
 	}
 }
 
@@ -434,15 +431,17 @@ class AddButton extends React.Component {
 	  }
 	}
 	render(){
-		return <button type="button" style={{ "width": "100%" }} className="btn btn-success add" onClick={this.onClick.bind(this)} disabled={this.props.disabled}>Add</button>
+		return <button type="button" className="btn btn-success add" onClick={this.onClick.bind(this)} disabled={this.props.disabled}>Add</button>
 	}
 }
 
 class Column extends React.Component {
   render(){
 	if (this.props.type==="token"){
-		const token_label = this.props.placesymbol+"("+this.props.placeholder.toString().substring(0,6) + "..."+this.props.placeholder.toString().substring(36,42)+")";
+		const token_label = this.props.placesymbol+" ("+this.props.placeholder.toString().substring(0,6) + "..."+this.props.placeholder.toString().substring(36,42)+")";
 		return <td>{token_label}</td> 
+	} else if (this.props.type === "exchange1" || this.props.type === "exchange2" || this.props.type === "exchange3" ){
+		return <td className="small">{this.props.placeholder}</td> 
 	} else if (this.props.placeholder === "Red"){
 		return <td><span className="text-danger">
 		  {this.props.placeholder}
@@ -452,15 +451,17 @@ class Column extends React.Component {
 		  {this.props.placeholder}
 		</span></td> 
 	} else if (this.props.placeholder === "Negative"){
-		return <td><span className="red-arrow text-danger">
-		  {this.props.placeholder}<span className="fa fa-arrow-down"></span>
-		</span></td> 
+		return <td><span className="red-arrow sort-icon"></span></td> 
 	} else if (this.props.placeholder === "Positive"){
-		return <td><span className="green-arrow text-success">
-		  {this.props.placeholder}<span className="fa fa-arrow-up"></span>
-		</span></td> 
-	} if (this.props.type === "buy_fee" || this.props.type === "sell_fee" || this.props.type === "transfer_fee" || this.props.type === "buffer_fee" || this.props.type === "total"){
+		return <td><span className="green-arrow sort-icon"></span></td> 
+	} else if (this.props.type === "buy_fee" || this.props.type === "sell_fee" || this.props.type === "transfer_fee" || this.props.type === "buffer_fee" || this.props.type === "total"){
 		return <td>{this.props.placeholder}%</td> 
+	} else if (this.props.type === "increase" ){
+		if (Number(this.props.placeholder) >= 0 ){
+			return <td className="text-success">{this.props.placeholder}</td> 			
+		} else {
+			return <td className="text-danger">{this.props.placeholder}</td> 		
+		}
 	} else {
 		return <td>{this.props.placeholder}</td> 
 	}	
@@ -488,26 +489,21 @@ class Row extends React.Component {
 
 class Table extends React.Component {
   render(){
-	return <table className="table table-bordered">
+	return <table className="table">
 				<thead>
 					<tr>
-						{[
-							'Token','Exchange1','Exchange2','Exchange3','Yield Potential','Percentage','Buy Recommendation','Sell Recommendation','Status','Transaction','Trend'
-						  ].map((elem, key) => {
-								return (
-								  <th key={key}>
-									<div className="table-header">
-									  {elem}									  
-									  <div>
-										<button className="sort-icon sort-asc"></button>
-										<button className="sort-icon sort-desc"></button>										  
-									  </div>
-									</div>
-								  </th>
-								);
-						  })
-						}
-						<th><div className="table-header">Action</div></th>
+						<th className="table-header">TOKEN</th>
+						<th className="table-header">EXCHANGE<br/>1</th>
+						<th className="table-header">EXCHANGE<br/>2</th>
+						<th className="table-header">EXCHANGE<br/>3</th>
+						<th className="table-header">YIELD<br/>POTENTIAL</th>
+						<th className="table-header">%</th>
+						<th className="table-header">BUY<br/>RECOMM.</th>
+						<th className="table-header">SELL<br/>RECOMM.</th>
+						<th className="table-header">STATUS</th>
+						<th className="table-header">TRANSACTIONS <br/>IN THE LAST 24Hrs</th>
+						<th className="table-header text-center">TREND</th>
+						<th className="table-header text-center">ACTION</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -536,25 +532,15 @@ class Row1 extends React.Component {
 
 class Table1 extends React.Component {
   render(){
-	return <table className="table table-bordered">
+	return <table className="table">
 				<thead>
 					<tr>
-						{[
-							'Token', 'Buy',	'Transfer',	'Sell',	'Buffer', 'Total'
-						  ].map((elem, key) => {
-								return (
-								  <th key={key}>
-									<div className="table-header">
-									  {elem}									  
-									  <div>
-										<button className="sort-icon sort-asc"></button>
-										<button className="sort-icon sort-desc"></button>										  
-									  </div>
-									</div>
-								  </th>
-								);
-						  })
-						}
+						<th className="table-header">TOKEN</th>
+						<th className="table-header">BUY</th>
+						<th className="table-header">TRANSFER</th>
+						<th className="table-header">SELL</th>
+						<th className="table-header">BUFFER</th>
+						<th className="table-header">TOTAL</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -589,21 +575,21 @@ class Row2 extends React.Component {
 
 class Table2 extends React.Component {
   render(){
-	return <table className="table table-bordered">
+	return <table className="table">
 				<thead>
-					<tr>
-						{[
-							'Tokens', 'Tokens to buy on lowest priced exchange','Tokens after Purchase','Tokens after Transfer','Trading Pair','Trading Pair Price','Net Post Transfer','BNB Price', 'BNBs', 'Tokens for BNB/Token Price', 'New Tokens', 'Increase/Decrease'
-						  ].map((elem, key) => {
-								return (
-								  <th key={key}>
-									<div className="table-header">
-									  {elem}
-									</div>
-								  </th>
-								);
-						  })
-						}
+					<tr>						
+						<th className="table-header">TOKENS</th>
+						<th className="table-header">TOKENS TO BUY<br/>ON LOWEST<br/>PRICED EXCHANGE</th>
+						<th className="table-header">TOKENS<br/>AFTER<br/>PURCHASE</th>
+						<th className="table-header">TOKENS<br/>AFTER<br/>TRANSFER</th>
+						<th className="table-header">TRADING<br/>PAIR</th>
+						<th className="table-header">TRADING<br/>PAIR<br/>PRICE</th>
+						<th className="table-header">NET<br/>POST<br/>TRANSFER</th>
+						<th className="table-header">BNB<br/>PRICE</th>
+						<th className="table-header">BNBS</th>
+						<th className="table-header">TOKENS FOR<br/>BNB/TOKEN<br/>PRICE</th>
+						<th className="table-header">NEW<br/>TOKENS</th>
+						<th className="table-header">INCREASE/<br/>DECREASE</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -707,7 +693,22 @@ class Token extends React.Component {
 			}).catch(err => {
 				console.error(err);
 			})
-
+		
+		await axios.get(process.env.REACT_APP_SERVER_URL+'/transaction?token='+data1.token).then( async res => {
+			const data = await JSON.parse(res.data);
+			transaction = status = 0;
+			data["total_volumes"].map(function(object, i){
+				transaction = transaction + object[1];
+				status = i+1;
+				return status;
+			})
+			this.state.datas[i].transaction = parseInt(transaction / status);
+		}).catch(err => {
+			console.error(err);
+		})
+			
+			
+/*
 		await fetch("https://api.coingecko.com/api/v3/coins/binance-smart-chain/contract/"+data1.token+"/market_chart/?vs_currency=usd&days=1").then(async response => {
 			const data = await response.json();			
 			transaction = 0;
@@ -738,7 +739,7 @@ class Token extends React.Component {
 			this.setState({ errorMessage: error.toString() });
 			console.error('There was an error!', error);
 		})
-
+*/
 		const max = Math.max(Number(this.state.datas[i].exchange1), Number(this.state.datas[i].exchange2), Number(this.state.datas[i].exchange3));
 		const min = Math.min(Number(this.state.datas[i].exchange1), Number(this.state.datas[i].exchange2), Number(this.state.datas[i].exchange3));		
 		this.state.datas[i].potential = (max-min).toFixed(8)
@@ -813,13 +814,22 @@ class Token extends React.Component {
 			console.error(err);
 		})
 
-
+	await axios.get(process.env.REACT_APP_SERVER_URL+'/transaction?token='+token).then( async res => {
+			const data = await JSON.parse(res.data);
+			transaction = status = 0;
+			data["total_volumes"].map(function(object, i){
+				transaction = transaction + object[1];
+				status = i+1;
+				return status;
+			})
+			transaction = parseInt(transaction / status);
+		}).catch(err => {
+			console.error(err);
+		})
+	
+/*
 	await fetch("https://api.coingecko.com/api/v3/coins/binance-smart-chain/contract/"+token+"/market_chart/?vs_currency=usd&days=1").then(async response => {
 		const data = await response.json();
-		/*
-		if (!response.ok) {
-			const error = (data && data.message) || response.statusText;	
-		}*/
 		transaction = 0;
 		data["total_volumes"].map(function(object, i){
 			transaction = transaction + object[1];
@@ -832,7 +842,7 @@ class Token extends React.Component {
 		transaction="Token incorrect"		
 	})
  
-    await fetch("https://api.coingecko.com/api/v3/coins/safemoon/market_chart?vs_currency=usd&days=2").then(async response => {
+    await fetch("https://api.coingecko.com/api/v3/coins/"+exchange1_symbol.toLowerCase()+"/market_chart?vs_currency=usd&days=2").then(async response => {
 		const data = await response.json();
 		trend = 0;
 		status = 1;
@@ -846,20 +856,7 @@ class Token extends React.Component {
 	.catch(error => {
 		this.setState({ errorMessage: error.toString() });
 		console.error('There was an error!', error);
-	})
-	
-/*	switch(this.props.value) {
-            case 1:
-              return this.myComponentMethod();
-              break;
-            case 2: 
-              return () => { return <AnotherComponent/> }; 
-              break;
-            case 3:
-              return <div>1</div>; 
-              break;
-            default: return null; break;
-          }
+	})	
 		  */
 	const max = Math.max(Number(exchange1), Number(exchange2), Number(exchange3));
 	const min = Math.min(Number(exchange1), Number(exchange2), Number(exchange3));		
@@ -904,14 +901,14 @@ class Token extends React.Component {
 					</div>
 					<div className="row">
 						<div className="col-md-8 mb-5">
-							<h3>Tax Calculation</h3>					
+							<h3 className="mb-4">Tax Calculation</h3>					
 							<div>
 								<Table1 datas={this.state.datas}  />
 							</div>
 						</div>
 					</div>
 					<div className="mb-5">
-						<h3>Net Calculation</h3>					
+						<h3 className="mb-4">Net Calculation</h3>					
 						<div>
 							<Table2 datas={this.state.datas} onUpdate={this.onUpdate} />
 						</div>

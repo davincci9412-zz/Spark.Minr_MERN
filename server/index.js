@@ -5,10 +5,9 @@ const dotenv = require('dotenv');
 const service = require("./src/service")
 
 const app = express();
-const cors = require('cors')
 
+const cors = require('cors')
 app.use(cors());
-//app.use(cors());
 // Bodyparser middleware
 app.use(
   bodyParser.urlencoded({
