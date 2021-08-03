@@ -355,13 +355,14 @@ class Inputs extends React.Component {
     
   render(){
 	return  <div className='search-box row'>
-	  <div className='col-md-4'><Input name='token' change={this.handleChange.bind(this, 'token')} value={this.state.token} placeholder='Token' /></div>
-	  <div className='col-md-2'><Input0 name='buy_fee' change={this.handleChange.bind(this, 'buy_fee')} value={this.state.buy_fee} placeholder='Fees In' /></div>
-	  <div className='col-md-2'><Input0 name='sell_fee' change={this.handleChange.bind(this, 'sell_fee')} value={this.state.sell_fee} placeholder='Fees Out' /></div>
-	  <div className='col-md-2'><Input0 name='buffer_fee' change={this.handleChange.bind(this, 'buffer_fee')} value={this.state.buffer_fee} placeholder='Buffer Fee' /></div>
-	  <div className='col-md-2 text-right'><AddButton newData={this.state} create={this.props.onCreate} clear={this.handleClear} disabled={!this.state.formValid}/></div>
-	    
-	</div>
+				<div className="container-fluid row">
+					<div className='col-md-4'><Input name='token' change={this.handleChange.bind(this, 'token')} value={this.state.token} placeholder='Token' /></div>
+					<div className='col-md-2'><Input0 name='buy_fee' change={this.handleChange.bind(this, 'buy_fee')} value={this.state.buy_fee} placeholder='Fees In' /></div>
+					<div className='col-md-2'><Input0 name='sell_fee' change={this.handleChange.bind(this, 'sell_fee')} value={this.state.sell_fee} placeholder='Fees Out' /></div>
+					<div className='col-md-2'><Input0 name='buffer_fee' change={this.handleChange.bind(this, 'buffer_fee')} value={this.state.buffer_fee} placeholder='Buffer Fee' /></div>
+					<div className='col-md-2 text-right'><AddButton newData={this.state} create={this.props.onCreate} clear={this.handleClear} disabled={!this.state.formValid}/></div>			
+				</div>	   
+			</div>
   }
 }
 /*	<div className="col-md-2"></div>	
@@ -409,6 +410,11 @@ class DeleteButton extends React.Component {
 }
 
 class UpdateButton extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = { value: this.props.value, buy_token_input:"" };
+		this.handleChange = this.handleChange.bind(this);
+	}
 	onClick() {
 	  this.props.update.call(null, this.props.uuid, this.state.buy_token_input);
 	}
@@ -418,7 +424,7 @@ class UpdateButton extends React.Component {
 		this.setState(change);
 	}
 	render(){
-		return <td><div className="input-group"><input type='text' name="buy_token_input" onChange={this.handleChange.bind(this, 'buy_token_input')} value={this.props.value} autoComplete="off"  className='update-input form-control' /><button type="button" className="btn" onClick={this.onClick.bind(this)}>Go</button></div></td>		
+		return <td><div className="input-group"><input type='text' name="buy_token_input" onChange={this.handleChange.bind(this, 'buy_token_input')} autoComplete="off" className='update-input form-control' /><button type="button" className="btn" onClick={this.onClick.bind(this)}>Go</button></div></td>		
 	}
 }
 
@@ -680,21 +686,21 @@ class Token extends React.Component {
 			this.state.datas[i].exchange1="Token incorrect"
 		})
 		
-		await axios.get(process.env.REACT_APP_SERVER_URL+'/exchange2', { params : { symbol: data1.exchange2_symbol}}).then( async res => {
+		await axios.get(process.env.REACT_APP_SERVER_URL+'/exchange/exchange2', { params : { symbol: data1.exchange2_symbol}}).then( async res => {
 				const data = await JSON.parse(res.data).data.tickers[0];
 				this.state.datas[i].exchange2=data.best_ask;
 			}).catch(err => {
 				console.error(err);
 			})
 	
-		await axios.get(process.env.REACT_APP_SERVER_URL+'/exchange3?symbol='+data1.exchange3_symbol).then( async res => {
+		await axios.get(process.env.REACT_APP_SERVER_URL+'/exchange/exchange3?symbol='+data1.exchange3_symbol).then( async res => {
 				  const data = await JSON.parse(res.data);
 				  this.state.datas[i].exchange3 = data.result.ask;
 			}).catch(err => {
 				console.error(err);
 			})
 		
-		await axios.get(process.env.REACT_APP_SERVER_URL+'/transaction?token='+data1.token).then( async res => {
+		await axios.get(process.env.REACT_APP_SERVER_URL+'/exchange/transaction?token='+data1.token).then( async res => {
 			const data = await JSON.parse(res.data);
 			transaction = status = 0;
 			data["total_volumes"].map(function(object, i){
@@ -800,21 +806,21 @@ class Token extends React.Component {
 		exchange1="Token incorrect"	
 	})
 
-	await axios.get(process.env.REACT_APP_SERVER_URL+'/exchange2', { params : { symbol: exchange2_symbol}}).then( async res => {
+	await axios.get(process.env.REACT_APP_SERVER_URL+'/exchange/exchange2', { params : { symbol: exchange2_symbol}}).then( async res => {
 			const data = await JSON.parse(res.data).data.tickers[0];
 			exchange2 = data.best_ask;
 		}).catch(err => {
 			console.error(err);
 		})
 	
-	await axios.get(process.env.REACT_APP_SERVER_URL+'/exchange3?symbol='+exchange3_symbol).then( async res => {
+	await axios.get(process.env.REACT_APP_SERVER_URL+'/exchange/exchange3?symbol='+exchange3_symbol).then( async res => {
 			  const data = await JSON.parse(res.data);
 			  exchange3 = data.result.ask;
 		}).catch(err => {
 			console.error(err);
 		})
 
-	await axios.get(process.env.REACT_APP_SERVER_URL+'/transaction?token='+token).then( async res => {
+	await axios.get(process.env.REACT_APP_SERVER_URL+'/exchange/transaction?token='+token).then( async res => {
 			const data = await JSON.parse(res.data);
 			transaction = status = 0;
 			data["total_volumes"].map(function(object, i){

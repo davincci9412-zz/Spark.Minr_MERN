@@ -7,6 +7,12 @@ import LoginForm from '../components/login/LoginForm';
 import { loginUser } from '../actions/authActions';
 
 class Login extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { email:"", username:"", password:""};
+  }
+
   componentDidMount() {
     if (this.props.auth.isAuthenticated) {
       this.props.history.push('/dashboard');
@@ -14,22 +20,16 @@ class Login extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.auth.isAuthenticated) {
       this.props.history.push('/dashboard');
 	    //this.props.history.push('/exchange');
-    }
-
-    if (nextProps.errors) {
-      this.setState({
-        errors: nextProps.errors,
-      });
     }
   }
 
   render() {
     return (
-      <Box px={[3, 4]} py={[3, '50px']} maxWidth="960px" mx="auto">
+      <Box className="login">
         <LoginForm
           SigninOrUp="Log in"
           EventHandler={this.props.loginUser}

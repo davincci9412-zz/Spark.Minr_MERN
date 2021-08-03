@@ -3985,7 +3985,6 @@ tbody.collapse.show {
   z-index: 2;
   color: #fff;
   background-color: #007bff;
-  border-color: #007bff;
 }
 .page-item.disabled .page-link {
   color: #868e96;

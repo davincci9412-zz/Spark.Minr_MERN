@@ -6,7 +6,7 @@ class Footer extends Component {
   
   render() {
     return (
-      <Box className="footer pt-3">
+      <Box className="footer container-fluid pt-3">
 			<div className="row py-4">
 				<div className="col-md-3">
 					<div className="menu-title my-5"><img src={logo} className="title" alt="Logo"/></div>
@@ -30,8 +30,8 @@ class Footer extends Component {
 				<div className="col-md-3">
 					<h4 className="footer-title">Community</h4>
 					<div className="green-bar my-4"></div>
-					<div className="my-4 opacity-05 "><a href="https://drive.google.com/file/d/1fxUhA1kUB7vYMV_Uupd2F1l11K0tYTj4/view?usp=drivesdk" target="_blank" rel="noreferrer">Twitter</a></div>
-					<div className="my-4 opacity-05 "><a href="https://drive.google.com/file/d/1fxUhA1kUB7vYMV_Uupd2F1l11K0tYTj4/view?usp=drivesdk" target="_blank" rel="noreferrer">Telegram</a></div>
+					<div className="my-4 opacity-05 "><a href="https://twitter.com/@Minr25429987" target="_blank" rel="noreferrer">Twitter</a></div>
+					<div className="my-4 opacity-05 "><a href="https://t.me/minr1" target="_blank" rel="noreferrer">Telegram</a></div>
 				</div>
 			</div>
       </Box>

@@ -15,7 +15,7 @@ class Register extends Component {
 
   render() {
     return (
-      <Box px={[3, 4]} py={[3, '50px']} maxWidth="960px" mx="auto">
+      <Box className="login">
         <LoginForm
           SigninOrUp="Register"
           EventHandler={userData => this.props.registerUser(userData, this.props.history)}

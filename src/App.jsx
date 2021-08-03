@@ -12,6 +12,7 @@ import Arbitrage from './pages/arbitrage';
 import Tracker from './pages/tracker';
 import Register from './pages/register';
 import Login from './pages/login';
+import Init from './pages/init';
 import Tracker1 from './pages/tracker1';
 
 // Check for token to keep user logged in
@@ -32,8 +33,7 @@ if (localStorage.jwtToken) {
     // Redirect to login
     window.location.href = './login';
   }
-}
-
+} 
 
 
 
@@ -50,6 +50,7 @@ class App extends Component {
               <Route exact path="/tracker" component={Tracker} />
               <Route exact path="/tracker1" component={Tracker1} />
               <Route exact path="/login" component={Login} />
+              <Route exact path="/init" component={Init} />
               <Redirect to="/login" />
             </Switch>
           </div>

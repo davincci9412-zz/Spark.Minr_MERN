@@ -1,22 +1,25 @@
 import axios from 'axios';
 import setAuthToken from '../utils/setAuthToken';
 import jwt_decode from 'jwt-decode';
-
-import { SET_CURRENT_USER, USER_LOADING } from './types';
+import { GET_ERRORS, SET_CURRENT_USER, USER_LOADING } from './types';
 
 // Register User
 export const registerUser = (userData, history) => dispatch => {
   axios
-    .post(process.env.REACT_APP_SERVER_URL+'/register', userData)
-    .then(res => history.push('/login'))
-    .catch(err =>{return Promise.reject(err);}      
+    .post(process.env.REACT_APP_SERVER_URL+'/auth/register', userData)
+    .then(res => window.location.href = '/auth/login')
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data,
+      })
     );
 };
 
 // Login - get user token
 export const loginUser = userData => dispatch => {
   axios
-    .post(process.env.REACT_APP_SERVER_URL+'/login', userData)
+    .post(process.env.REACT_APP_SERVER_URL+'/auth/login', userData)
     .then(res => {
       // Save to localStorage
 
@@ -27,11 +30,18 @@ export const loginUser = userData => dispatch => {
       setAuthToken(token);
       // Decode token to get user data
       const decoded = jwt_decode(token);
+      localStorage.setItem('id', decoded.id);
+      localStorage.setItem('email', decoded.email);
       // Set current user
       dispatch(setCurrentUser(decoded));
     })
-    .catch(err =>{return Promise.reject(err);}   
-  )  
+    .catch(err => {
+      console.log(err.response.data);
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data,
+      });
+    });
 };
 
 // Set logged in user

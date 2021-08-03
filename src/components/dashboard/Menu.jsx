@@ -61,7 +61,6 @@ function menuClick(){
 		menu.classList.remove("menu-close");
 	} else {
 		menu.className += " menu-close";
-	}
-	  
+	}	  
 }
 
