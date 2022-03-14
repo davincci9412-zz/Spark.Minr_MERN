@@ -19,10 +19,21 @@ module.exports = {
 		dbName: env.REACT_APP_MONGO_DB,
 		useNewUrlParser: true,
 		useUnifiedTopology: true,
-		poolSize: 3, // Maintain up to 10 socket connections
-		socketTimeoutMS:120000
+		poolSize: 5, // Maintain up to 10 socket connections
+		socketTimeoutMS:40000
+	}).then(() => console.log("Awake________"+ new Date() + "________"))  		
+	.catch((err) => console.log(err));
+  },
+  roi_update: function(){
+	config.mongoose
+	.connect(env.REACT_APP_MONGO_URL, {
+		dbName: env.REACT_APP_MONGO_DB,
+		useNewUrlParser: true,
+		useUnifiedTopology: true,
+		poolSize: 2, // Maintain up to 10 socket connections
+		socketTimeoutMS:30000
 	})
-	.then(() => console.log("Awake________"+ new Date() + "________"))  		
+	.then(() => console.log("Roi Check________"+ new Date() + "________"))  		
 	.catch((err) => console.log(err));
 
 	Wallet.find().lean().sort({ create : "asc"}).then((wallets)=>{
@@ -248,16 +259,6 @@ module.exports = {
   },
 
   token: function () {
-	config.mongoose
-	.connect(env.REACT_APP_MONGO_URL, {
-		dbName: env.REACT_APP_MONGO_DB,
-		useNewUrlParser: true,
-		useUnifiedTopology: true,
-		poolSize: 1, // Maintain up to 10 socket connections
-		socketTimeoutMS:60000
-	})
-	.then(() => console.log('MongoDB connected for the token cron work'))
-	.catch((err) => console.log(err));
 
 	request('https://api.coingecko.com/api/v3/coins/list?include_platform=true', function (error, response, body) {
 		tokens = []
@@ -320,16 +321,6 @@ module.exports = {
   },
 
   mainBalance: function(){
-	config.mongoose
-	.connect(env.REACT_APP_MONGO_URL, {
-		dbName: env.REACT_APP_MONGO_DB,
-		useNewUrlParser: true,
-		useUnifiedTopology: true,
-		poolSize: 1, // Maintain up to 10 socket connections
-		socketTimeoutMS:30000
-	})
-	.then(() => console.log('MongoDB connected for the BNB balance cron work'))
-	.catch((err) => console.log(err));
 	Wallet.find().lean().then(results => {
         if (results.length >0){
 			promiseForeach.each(results,
@@ -351,16 +342,6 @@ module.exports = {
   },
 
   balance: function(){
-	config.mongoose
-	.connect(env.REACT_APP_MONGO_URL, {
-		dbName: env.REACT_APP_MONGO_DB,
-		useNewUrlParser: true,
-		useUnifiedTopology: true,
-		poolSize: 1, // Maintain up to 10 socket connections
-		socketTimeoutMS:60000
-	})
-	.then(() => console.log('MongoDB connected for the balance cron work'))
-	.catch((err) => console.log(err));
 	Wallet.find().lean().then(results => {
         if (results.length >0){
 			promiseForeach.each(results,
@@ -382,16 +363,6 @@ module.exports = {
   },
 
   transactions: function(){
-	config.mongoose
-	.connect(env.REACT_APP_MONGO_URL, {
-		dbName: env.REACT_APP_MONGO_DB,
-		useNewUrlParser: true,
-		useUnifiedTopology: true,
-		poolSize: 1, // Maintain up to 10 socket connections
-		socketTimeoutMS:60000
-	})
-	.then(() => console.log('MongoDB connected for the transaction cron work'))
-	.catch((err) => console.log(err));
 	Wallet.find().lean().then(results => {
         if (results.length >0){
 			promiseForeach.each(results,
@@ -413,16 +384,6 @@ module.exports = {
   },
 
   tokenTransactions: function(){
-	config.mongoose
-	.connect(env.REACT_APP_MONGO_URL, {
-		dbName: env.REACT_APP_MONGO_DB,
-		useNewUrlParser: true,
-		useUnifiedTopology: true,
-		poolSize: 1, // Maintain up to 10 socket connections
-		socketTimeoutMS:60000
-	})
-	.then(() => console.log('MongoDB connected for the token transaction cron work'))
-	.catch((err) => console.log(err));
 	Wallet.find().lean().then(results => {
         if (results.length >0){
 			promiseForeach.each(results,

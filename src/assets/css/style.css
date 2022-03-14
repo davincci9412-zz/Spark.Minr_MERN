@@ -9,8 +9,12 @@
     top: 49%;
     left: 51%;
     transform: translate(-50%, -50%);
-    max-width:750px;
+    width:30%;
     margin:auto;
+}
+h1.logo{
+    letter-spacing:2px;
+    padding-top:4%;
 }
 .App a{
     color:white;

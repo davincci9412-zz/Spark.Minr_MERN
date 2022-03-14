@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Box } from '@blockstack/ui';
 
 import LoginForm from '../components/login/LoginForm';
 import { loginUser } from '../actions/authActions';
@@ -29,13 +28,13 @@ class Login extends Component {
 
   render() {
     return (
-      <Box className="login">
+      <div className="login">
         <LoginForm
           SigninOrUp="Log in"
           EventHandler={this.props.loginUser}
           Errors={this.props.errors}
         />
-      </Box>
+      </div>
     );
   }
 }

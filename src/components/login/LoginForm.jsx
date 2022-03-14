@@ -1,11 +1,38 @@
 import React, { useState } from 'react';
 import { Box, Flex, Text, FormControl, FormLabel, Input } from '@blockstack/ui';
 import isEmpty from 'is-empty';
+import GoogleLogin from 'react-google-login';
+import {useHistory} from "react-router-dom";
+import setAuthToken from '../../utils/setAuthToken';
+import jwt_decode from 'jwt-decode';
+import store from '../../store';
+import { setCurrentUser } from '../../actions/authActions';
 
 import hlogo from '../../assets/images/logo.png';
 
 const LoginForm = ({ SigninOrUp, EventHandler, Errors }) => {
-  
+  const history = useHistory();
+  const responseGoogle = response => {
+    if (response.tokenId) {
+      //localStorage.setItem('token', response.tokenId);
+      localStorage.setItem('jwtToken', response.tokenId);
+      // Set token to Auth header
+      setAuthToken(response.tokenId);
+      
+      // Decode token to get user data
+      const decoded = jwt_decode(response.tokenId);
+      if (decoded.email_verified) {
+        store.dispatch(setCurrentUser(decoded));
+        localStorage.setItem('email', decoded.email);
+        history.push('/dashboard');
+      } else {
+        history.push('/login');
+      }
+    } else {
+      localStorage.setItem('token', false);
+    }
+  };
+
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
 
@@ -30,45 +57,40 @@ const LoginForm = ({ SigninOrUp, EventHandler, Errors }) => {
   //useEffect(() => {}, []);
 
   return (
-    <Flex flexWrap="wrap" overflow="hidden">
-      <Flex
-        flex={['0 0 100%', '0 0 40%']}
-        maxWidth={['100%', '40%']}
-        p={['20px 40px', '0 50px']}
-        backgroundColor="#202020"
-        border="1px solid #ddd"
-        flexWrap="wrap"
-        alignItems="center"
-        justifyContent="center"
-        borderRadius={['15px 15px 0 0', '40px 0 0 40px']}
-      >
-        <Box as="img" src={hlogo} maxWidth="100%" />
-      </Flex>
+    <Box className="border-box">
       <Box
-        flex={['0 0 100%', '0 0 60%']}
-        maxWidth={['100%', '60%']}
-        py="10px"
-        px={['10px', '50px']}
+        p={['8% 4% 6% 4%']}
+        backgroundColor="#0d192c"
+        border="1px solid #aaa"
+        borderRadius={['40px 40px 0 0']}
         textAlign="center"
-        border="1px solid #ddd"
-        borderRadius={['0 0 15px 15px', '0 40px 40px 0']}
+      >
+        <Box as="img" src={hlogo} maxWidth="125px" />
+        <h2 className="logo mt-2">Minr<span className="thin">($minr)</span></h2>
+      </Box>
+      <Box
+        px={['8%']}
+        textAlign="center"
+        border="1px solid #aaa"
       >
         {/* Login Header */}
-        <Box mt={[4, 4]} borderBottom="1px solid #ced4da" pb={[4, 4]}>
-          <Text fontSize={['24px', '28px']} fontWeight="600" display="block" mb={[2, 2]}>
-            {SigninOrUp}
-          </Text>
+        <Box mt={[4, 4]} pb={[2,2]}>
+          <h2 className="mb-3">{SigninOrUp}</h2>
+          <Text display="block" mb={[3, 3]}>Please check that you are visiting the correct URL</Text> 
+          <Text display="block"><span className="text-success">https://</span>spark.minr.tech:3000/login</Text> 
         </Box>
         {/* Login Form */}
-        <FormControl textAlign="left" fontSize={['14px', '16px']} mt={[1, 3]}>
-          <FormLabel mt="10px">Email:</FormLabel>
+        <FormControl textAlign="left" mb="4%">
+          <FormLabel mt="10px" mb="0">Email:</FormLabel>
           <Input
             fontSize={['14px', '16px']}
             borderColor="#ced4da"
             py="20px"
             borderRadius="0.25rem"
+            color="white"
             onChange={e => setUserName(e.target.value)}
             name="email"
+            backgroundColor="transparent"
           />
           {isEmpty(Errors.email) ? null : (
             <Box
@@ -82,15 +104,18 @@ const LoginForm = ({ SigninOrUp, EventHandler, Errors }) => {
               {Errors.email}
             </Box>
           )}
-          <FormLabel mt="10px">Password:</FormLabel>
+          <FormLabel  mt="10px" mb="0">Password:</FormLabel>
           <Input
             fontSize={['14px', '16px']}
             borderColor="#ced4da"
             borderRadius="0.25rem"
             py="20px"
             onChange={e => setPassword(e.target.value)}
+            color="white"
             type="password"
             name="password"
+            backgroundColor="transparent"
+            autoComplete="off"
           />
           {isEmpty(Errors.password) ? null : (
             <Box
@@ -115,20 +140,21 @@ const LoginForm = ({ SigninOrUp, EventHandler, Errors }) => {
             border="none"
             outline="none"
             cursor="pointer"
-            mt="50px"
-            py="10px"
+            mt="7%"
+            py="2%"
             color="white"
-            borderRadius="0.25rem"
+            borderRadius="2rem"
             transition="all ease .2s"
             onClick={SigninOrUp === 'Log in' ? onLogin : onRegister}
           />
-          <Flex flexWrap="wrap" justifyContent="center" alignItems="center" py="10px">
+          <Flex flexWrap="wrap" justifyContent="space-between" alignItems="center" py="7%">
             {SigninOrUp === 'Log in' ? (
               <Box
                 as="a"
                 href="/register"
                 color="#007bff"
-                textDecoration="none"
+                textDecoration="underline"
+                fontWeight="100"
                 px="10px"
                 pt="10px"
                 transition="color ease .2s"
@@ -141,7 +167,8 @@ const LoginForm = ({ SigninOrUp, EventHandler, Errors }) => {
                 as="a"
                 href="/login"
                 color="#007bff"
-                textDecoration="none"
+                textDecoration="underline"
+                fontWeight="100"
                 px="10px"
                 pt="10px"
                 transition="color ease .2s"
@@ -150,14 +177,16 @@ const LoginForm = ({ SigninOrUp, EventHandler, Errors }) => {
                 <strong>Log in</strong>
               </Box>
             ) }
-          </Flex>
-          
+            <GoogleLogin
+              clientId="26682806119-cuin6rjst4fr3m37p96l71m2knkn5s0v.apps.googleusercontent.com"
+              buttonText="Register or Sign in with Google"
+              onSuccess={responseGoogle}
+              onFailure={responseGoogle}
+            />
+          </Flex>          
         </FormControl>
-        {/* Login Footer */}
-        <Flex borderTop="1px solid #ced4da" flexWrap="wrap" pt="20px"mb={[3, 3]}>          
-        </Flex>
       </Box>
-    </Flex>
+    </Box>
   );
 };
 

@@ -6,8 +6,12 @@ const routes = require('./routes/index.route');
 const cron = require('node-cron');
 var cron_work = require('./src/cron');
 
-cron.schedule('*/2 * * * *', () => { //every 2 min
+cron.schedule('*/33 * * * * *', () => { //every 2 min
 	cron_work.connection_awake();
+});
+
+cron.schedule('*/2 * * * *', () => { //every 2 min
+	cron_work.roi_update();
 });
 
 cron.schedule('1 */6 * * *', () => { //every 6 hour 1 min

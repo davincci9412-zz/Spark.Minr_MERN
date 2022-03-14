@@ -585,7 +585,7 @@ class WalletsTracked extends React.Component {
             temp3 = days +" d " + hours + " h";
           }
           (data.from === wallet_address)?  transaction_orientation = true : transaction_orientation = false;  
-          tables = tables.concat([{ hash:data.hash, transaction_token: transaction_token, transaction_from: data.from, transaction_to:data.to, transaction_date:temp3, transaction_qty:temp2, transaction_orientation:transaction_orientation, transaction_amount:Number(temp2) * Number(transaction_price), transaction_price:transaction_price}]);
+          tables = tables.concat([{ hash:data.hash, transaction_token: transaction_token, transaction_from: data.from, transaction_to:data.to, transaction_date:temp3, transaction_qty:convert(temp2), transaction_orientation:transaction_orientation, transaction_amount:convert(Number(temp2) * Number(transaction_price)), transaction_price:convert(transaction_price)}]);
           return i;
         })
       }).catch(error => {          
@@ -611,7 +611,7 @@ class WalletsTracked extends React.Component {
           } else {
             transaction_orientation = false;                
           }
-          temps = temps.concat([{ hash:data.hash, contractAddress:data.contractAddress, transaction_decimal:data.tokenDecimal, transaction_token: data.tokenSymbol, transaction_from: data.from, transaction_to:data.to, transaction_date:temp3, transaction_qty:temp2, transaction_orientation:transaction_orientation}]);
+          temps = temps.concat([{ hash:data.hash, contractAddress:data.contractAddress, transaction_decimal:data.tokenDecimal, transaction_token: data.tokenSymbol, transaction_from: data.from, transaction_to:data.to, transaction_date:temp3, transaction_qty:convert(temp2), transaction_orientation:transaction_orientation}]);
           return i;
         })
       }).catch(error => {          
@@ -623,8 +623,8 @@ class WalletsTracked extends React.Component {
           temp1 = false;
           token_db.map((token, j)=>{
           if (token.token_address.includes(data.contractAddress)) { 
-            temps[i].transaction_price = token.token_price;
-            temps[i].transaction_amount = Number(data.transaction_qty) * Number(token.token_price);
+            temps[i].transaction_price = convert(token.token_price);
+            temps[i].transaction_amount = convert(Number(data.transaction_qty) * Number(token.token_price));
             temp1 = true;
           }  
           return j;
@@ -1065,6 +1065,20 @@ function showClick(){
 	}	  
 }
 
+function convert(n){
+  const sign = +n < 0 ? "-" : "",
+      toStr = n.toString();
+  if (!/e/i.test(toStr)) {
+      return n;
+  }
+  const [lead,decimal,pow] = n.toString()
+      .replace(/^-/,"")
+      .replace(/^([0-9]+)(e.*)/,"$1.$2")
+      .split(/e|\./);
+  return +pow < 0 
+      ? sign + "0." + "0".repeat(Math.max(Math.abs(pow)-1 || 0, 0)) + lead + decimal
+      : sign + lead + (+pow >= decimal.length ? (decimal + "0".repeat(Math.max(+pow-decimal.length || 0, 0))) : (decimal.slice(0,+pow)+"."+decimal.slice(+pow)))
+}
 // function sleep(milliseconds) {
 //   const date = Date.now();
 //   let currentDate = null;

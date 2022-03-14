@@ -663,7 +663,7 @@ class Wallet extends React.Component {
             })
           }          
         } 
-        tokens_main = tokens_main.concat([{wallet_address:result.wallet_address, tokenName:result.tokenName, tokenSymbol:result.tokenSymbol, tokenDecimal:result.tokenDecimal, qty:result.qty, contractAddress:result.contractAddress}]);
+        tokens_main = tokens_main.concat([{wallet_address:result.wallet_address, tokenName:result.tokenName, tokenSymbol:result.tokenSymbol, tokenDecimal:result.tokenDecimal, qty:convert(result.qty), contractAddress:result.contractAddress}]);
       })
       .catch(error => {
       })  
@@ -707,9 +707,9 @@ class Wallet extends React.Component {
         temp3 = true;      
         token_db.map((data, j)=>{
           if (data.token_address.trim().toLowerCase().includes(token.contractAddress.trim().toLowerCase()) || data.token_address === token.tokenSymbol) { 
-            token_list[i].token_price = Number(data.token_price);
-            token_list[i].token_value = (token_list[i].qty * data.token_price)
-            token_list[i].token_change = Number(Number(data.token_24h_change).toFixed(2));
+            token_list[i].token_price = convert(Number(data.token_price));
+            token_list[i].token_value = convert((token_list[i].qty * data.token_price))
+            token_list[i].token_change = convert(Number(Number(data.token_24h_change).toFixed(2)));
             token_list[i].token_position =  'https://poocoin.app/tokens/'+token.contractAddress.trim().toLowerCase();
             temp3 = false;
           } 
@@ -724,8 +724,8 @@ class Wallet extends React.Component {
         if (roi_tokens.length>0){
           roi_tokens.map((roi, j)=>{
             if (token.tokenSymbol === roi.tokenSymbol){
-              token_list[i].token_average = Number(roi.token_average);
-              token_list[i].token_acquire =(Number(token.qty)* Number(roi.token_average))
+              token_list[i].token_average = convert(Number(roi.token_average));
+              token_list[i].token_acquire = convert((Number(token.qty)* Number(roi.token_average)))
               if (token_list[i].token_value === 0) {
                 token_list[i].token_rol = 0  
               } else {
@@ -734,7 +734,8 @@ class Wallet extends React.Component {
             }
             return j;
           })
-        } 
+        }
+        token_list[i].qty = convert(token_list[i].qty); 
       })
 
       token_list.map((token, i)=>{ 
@@ -749,14 +750,14 @@ class Wallet extends React.Component {
               } else {
                 temp1 = (Number(roi.token_acquire)/Number(roi.qty * Number(token.token_price))*100).toFixed(2)
               }
-              tables1 = tables1.concat([{timeStamp:roi.timeStamp, tokenSymbol:roi.tokenSymbol, tokenBought:roi.qty, tokenSold:0, qty:roi.qty, token_value:(roi.qty * Number(token.token_price)), token_price:token.token_price, token_average:(Number(roi.token_acquire)/Number(roi.qty)), token_acquire:roi.token_acquire, token_rol:temp1, token_change:token.token_change, token_position:token.token_position}]);
+              tables1 = tables1.concat([{timeStamp:roi.timeStamp, tokenSymbol:roi.tokenSymbol, tokenBought:convert(roi.qty), tokenSold:0, qty:convert(roi.qty), token_value:convert((roi.qty * Number(token.token_price))), token_price:convert(token.token_price), token_average:convert((Number(roi.token_acquire)/Number(roi.qty))), token_acquire:convert(roi.token_acquire), token_rol:temp1, token_change:token.token_change, token_position:token.token_position}]);
             } else if (roi.contractAddress.trim().toLowerCase() === token.contractAddress.trim().toLowerCase() && roi.from === wallet_address && roi.qty > 0){
               token_sold = token_sold + Number(roi.qty);
             }
             return j;
           })
-          token_list[i].tokenBought = token_bought;
-          token_list[i].tokenSold = token_sold;          
+          token_list[i].tokenBought = convert(token_bought);
+          token_list[i].tokenSold = convert(token_sold);          
         } else {
           token_bought = token_sold = 0;
           if (i === 0 ){
@@ -768,14 +769,14 @@ class Wallet extends React.Component {
                 } else {
                   temp1 = (Number(table.token_acquire)/Number(table.qty * Number(token.token_price))*100).toFixed(2)
                 }
-                tables1 = tables1.concat([{timeStamp:table.timeStamp, tokenSymbol:table.tokenSymbol, tokenBought:table.qty, tokenSold:0, qty:table.qty, token_value:(table.qty * Number(token.token_price)), token_price:token.token_price, token_average:(Number(table.token_acquire)/Number(table.qty)), token_acquire:table.token_acquire, token_rol:temp1, token_change:token.token_change, token_position:token.token_position}]);
+                tables1 = tables1.concat([{timeStamp:table.timeStamp, tokenSymbol:table.tokenSymbol, tokenBought:convert(table.qty), tokenSold:0, qty:convert(table.qty), token_value:convert((table.qty * Number(token.token_price))), token_price:convert(token.token_price), token_average:convert((Number(table.token_acquire)/Number(table.qty))), token_acquire:convert(table.token_acquire), token_rol:temp1, token_change:token.token_change, token_position:token.token_position}]);
               } else if (table.from === wallet_address && table.qty > 0){
                 token_sold = token_sold + Number(table.qty);
               }
               return j;
             })
-            token_list[i].tokenBought = token_bought;
-            token_list[i].tokenSold = token_sold;   
+            token_list[i].tokenBought = convert(token_bought);
+            token_list[i].tokenSold = convert(token_sold);   
           } else {
             if(temps.length >0){
               temps.map((roi, k)=>{
@@ -786,14 +787,14 @@ class Wallet extends React.Component {
                   } else {
                     temp1 = (Number(roi.token_acquire)/Number(roi.qty * Number(token.token_price))*100).toFixed(2)
                   }
-                  tables1 = tables1.concat([{timeStamp:roi.timeStamp, tokenSymbol:roi.tokenSymbol, tokenBought:roi.qty, tokenSold:0, qty:roi.qty, token_value:(roi.qty * Number(token.token_price)), token_price:token.token_price, token_average:(Number(roi.token_acquire)/Number(roi.qty)), token_acquire:roi.token_acquire, token_rol:temp1, token_change:token.token_change, token_position:token.token_position}]);
+                  tables1 = tables1.concat([{timeStamp:roi.timeStamp, tokenSymbol:roi.tokenSymbol, tokenBought:convert(roi.qty), tokenSold:0, qty:(roi.qty), token_value:convert((roi.qty * Number(token.token_price))), token_price:convert(token.token_price), token_average:convert((Number(roi.token_acquire)/Number(roi.qty))), token_acquire:convert(roi.token_acquire), token_rol:temp1, token_change:token.token_change, token_position:token.token_position}]);
                 } else if (roi.contractAddress.trim().toLowerCase() === token.contractAddress.trim().toLowerCase() && roi.from === wallet_address && roi.qty > 0){
                   token_sold = token_sold + Number(roi.qty);
                 }
                 return k;
               })  
-              token_list[i].tokenBought = token_bought;
-              token_list[i].tokenSold = token_sold;               
+              token_list[i].tokenBought = convert(token_bought);
+              token_list[i].tokenSold = convert(token_sold);               
             } 
           } 
         }
@@ -943,6 +944,20 @@ export default Wallet;
 //     currentDate = Date.now();
 //   } while (currentDate - date < milliseconds);
 // }
+function convert(n){
+  const sign = +n < 0 ? "-" : "",
+      toStr = n.toString();
+  if (!/e/i.test(toStr)) {
+      return n;
+  }
+  const [lead,decimal,pow] = n.toString()
+      .replace(/^-/,"")
+      .replace(/^([0-9]+)(e.*)/,"$1.$2")
+      .split(/e|\./);
+  return +pow < 0 
+      ? sign + "0." + "0".repeat(Math.max(Math.abs(pow)-1 || 0, 0)) + lead + decimal
+      : sign + lead + (+pow >= decimal.length ? (decimal + "0".repeat(Math.max(+pow-decimal.length || 0, 0))) : (decimal.slice(0,+pow)+"."+decimal.slice(+pow)))
+}
 function compareValues(key, order = 'asc') {
   return function innerSort(a, b) {
     if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
